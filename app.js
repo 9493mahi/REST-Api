@@ -2,7 +2,7 @@ var path = require('path');
 var fs = require('fs');
 var express = require('express');
 
-var g=require('./gallery');
+var e=require('./employee');
 
 var bluebird = require('bluebird');
 var bodyparser = require('body-parser');
@@ -11,7 +11,7 @@ var options = { promiseLib: promise }
 var pgp = require('pg-promise')(options)
 
 var app = express();
-var cs = 'postgres://postgres:root@localhost:5432/mahi'
+var cs = 'postgres://postgres:root@localhost:5432/employee'
 
 var db = pgp(cs)
 
@@ -32,19 +32,19 @@ app.use(bodyparser.urlencoded({ limit: '20mb', extended: true }))
 app.use(bodyparser.json({ limit: '20mb', extended: true }))
 
 app.use(express.static(path.join(__dirname, "pics")))
-app.use('/gallery',g)
+app.use('/employee',e)
 
-app.post('/', (req, res, next) => {
-    var fn = req.body.Fname;
-    var ln = req.body.Lname;
-    var a = req.body.Age;
-    var d = req.body.DOB
-    var e = req.body.Email;
+// app.post('/', (req, res, next) => {
+//     var fn = req.body.Fname;
+//     var ln = req.body.Lname;
+//     var a = req.body.Age;
+//     var d = req.body.DOB
+//     var e = req.body.Email;
 
-    db.query("insert into udetails values($1,$2,$3,$4,$5)", [fn, ln, a, d, e]).then((data) => {
-        res.send({ "message": "insert succesfully" })
-    })
-})
+//     db.query("insert into udetails values($1,$2,$3,$4,$5)", [fn, ln, a, d, e]).then((data) => {
+//         res.send({ "message": "insert succesfully" })
+//     })
+// })
 
 
 app.listen(app.get('port'), (err) => {
